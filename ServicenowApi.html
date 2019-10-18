@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8"/>
+<style>
+body {background-color: powderblue;}
+h1   {color: blue;}
+p    {color: red;}
+</style>
+<head>
+<div id="response2"></div>
+<img id = "demo" >
+<script>
+ window.onload = function() 
+ {
+//alert("Hello");
+var a = window.location.toString();
+var sysparm_query = a.substring(a.indexOf("=")+1 );
+//var sysparm_fields = a.substring(a.lastIndexOf("=")+1 );
+var URL = "https://csdev3.service-now.com/api/snc/playbook_framework/account/"
+var URL  = URL.concat(  sysparm_query );
+//alert(sysparm_query);
+//alert(sysparm_fields);
+//alert(URL);
+var requestBody = "";
+var client=new XMLHttpRequest();
+//var parser = new JSONParser();
+client.open("get",URL);
+client.setRequestHeader('Accept','application/json');
+client.setRequestHeader('Content-Type','application/json');
+//Eg. UserName="admin", Password="admin" for this code sample.
+client.setRequestHeader('Authorization', 'Basic '+btoa('integration.bi'+':'+'2f%XCnvVMMB%?m5!'));
+client.onreadystatechange = function() {
+  if(this.readyState == this.DONE) {
+     //document.getElementById("response").innerHTML=this.status + this.response;
+	// var parser = new JSONParser();
+	 var obj = JSON.parse(this.responseText);
+     var parseddata = obj.result[0].state;
+		// alert(parseddata);
+		// var table = "<img src='C:\/Users\/anik.dasgupta\/Documents\/Scripts\/InFlight.png' alt='inflight'/>" ;
+	 var img = ""
+      if(parseddata == "Open"){
+         img =  "C:\/inetpub\/wwwroot\/Pending.jpg";
+       }else if(parseddata == "Work in Progress") {
+	     img =  "C:\/inetpub\/wwwroot\/InFlight.png";
+    }else if (parseddata == "Pending"){
+         img =  "C:\/inetpub\/wwwroot\/Pending.jpg";
+		 } 
+	else if (parseddata == "Closed Complete") {
+	      img =  "C:\/inetpub\/wwwroot\/Completed.png";
+	}
+	
+	 document.getElementById("response2").innerHTML=obj.result[0].state;
+	 document.getElementById("demo").src = img;
+	
+    }
+	
+	
+};
+client.send(requestBody);
+//console.log(this.response2);
+
+}
+
+</script>
+</head>
+<body></body>
+
+</html>
+
+
+
+
+
+
+
+
+
